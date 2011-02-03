@@ -1,6 +1,6 @@
 package CPAN::Testers::HandBook::Mirror;
 
-#ABSTRACT: The CPAN Testers Handbook
+#ABSTRACT: The CPAN Testers Handbook: Mirror
 
 use strict;
 use warnings;
@@ -40,10 +40,38 @@ Subsequent synchronisation should be from one of the C<fast> CPAN mirrors.
     --delete-excluded rsync://mirrors3.kernel.org/mirrors/CPAN/ /home/ftp/CPAN/ \
     2>&1 | tee sync.log
 
-
+Once you have your first sync, a simple C<cron> job can be used to keep the mirror up to date.
 
 =head1 CPAN::Mini Mirror
 
+L<CPAN::Mini> can build a minimal local CPAN mirror containing only those files needed to install 
+the newest version of every distribution on CPAN.
+
+For CPAN Testing there are subclasses of L<CPAN::Mini> available, L<CPAN::Mini::Devel> and
+L<CPAN::Mini::Devel::Recent>. These subclasses enhance L<CPAN::Mini> to include the latest developer 
+and non-developer releases in the mirror.
+
+  $ minicpan -c CPAN::Mini::Devel -l /home/ftp/CPAN/ -r http://mirrors3.kernel.org/mirrors/CPAN/
+
+Once you have your first sync, a simple C<cron> job can be used to keep the mirror up to date.
+
 =head1 Serving a mirror
+
+If your local mirror is available to your smokers on a file system, either on the same server
+or a networked file system such as NFS or SMB, you can use C<file://> urls in your smoker
+configurations.
+
+Otherwise you will require a HTTP and/or FTP server to provide remote access to your local mirror.
+
+The installation and configuration of a suitable server is outside the scope of this document,
+but some considerations follow:
+
+=over
+
+=item FTP access be anonymous
+
+Any FTP server that is installed should provide C<anonymous> access to the local CPAN mirror.
+
+=back
 
 =cut
